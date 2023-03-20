@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import { supabase } from "../supabaseClient";
 
-const Chatbox = () => {
+export default function Chatbox  () {
     const messagesEndRef = useRef();
     const [messages, setMessages] = useState([]);
 
@@ -20,12 +20,18 @@ const Chatbox = () => {
 
     async function getData() {
         channel.subscribe(async (status) => {
-            let { data, error } = await supabase
-                .from('messages')
-                .select()
-
-            setMessages(data);
-            //console.log(data);
+            if (status == "SUBSCRIBED") {
+                const { data, error } = await supabase
+                    .from('messages')
+                    .select()
+                if(error){
+                    throw new error ("Data not available!");
+                }else{
+                    setMessages(data);
+                    //console.log(data);
+                }
+                
+            }
         })
 
     }
@@ -33,10 +39,10 @@ const Chatbox = () => {
     useEffect(() => {
         getData();
     },
-    []
+        [messages]
     )
 
-    
+
     channel.on(
         'postgres_changes',
         {
@@ -46,7 +52,7 @@ const Chatbox = () => {
             filter: `room_id=eq.${roomId}`,
         },
         (payload) => {
-            setMessages(lastData => [...lastData,payload.new])
+            setMessages(lastData => [...lastData, payload.new])
         }
     )
 
@@ -61,5 +67,4 @@ const Chatbox = () => {
     )
 }
 
-export default Chatbox;
 
