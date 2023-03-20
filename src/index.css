@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.containerWrapper {
+  @apply container mx-auto max-w-4xl;
+}
+/* 82, 234, 82 */
+.btn-ogo{
+  color: rgb(82, 234, 82 );
+}
+
+.text-exit{
+  color: rgb(221, 56, 56);
+  font-weight: 600;
+}
+
+.chat-bubble{
+  background-color:rgb(220, 248, 198);
+  font-weight: 400;
+}
+/* 
+.wallpaper{
+  background-image: url("../public/bg.jpg");
+} */
+
+
